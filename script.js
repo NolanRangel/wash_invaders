@@ -1,56 +1,100 @@
-const gameOn = true;
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
-const game = {};
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-const player = {
-    left: 400,
-    top: 620,
-    velocity: {x: 0, y: 0},
-    score: 0,
-    life: 3,
+class Player {
+    constructor() {
+        this.velocity = {
+            x: 0
+        };
+
+        const image = new Image();
+        image.src = './img/player.jpeg';
+
+        image.onload = () => {
+            this.image = image
+            this.width = image.width * 0.12;
+            this.height = image.height * 0.12;
+            this.pos = {
+                x: canvas.width / 2 - this.width / 2,
+                y: canvas.height - this.height - 30
+            };
+        }
+
+    }
+
+    // Methods
+    draw() {
+        // ctx.fillStyle = 'red';
+        // ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+        ctx.drawImage(this.image, this.pos.x, this.pos.y, this.width, this.height);
+    }
+
+    update() {
+        if(this.image) {
+            this.draw();
+            this.pos.x += this.velocity.x;
+        }
+    }
 }
 
-game.canvas = document.getElementById('canvas');
-game.ctx = game.canvas.getContext('2d');
 
-game.backgroundColor = '#000000';
-game.canvas.width = document.documentElement.clientWidth - 20;
+const player = new Player();
 
-game.update = function() {
-    game.ctx.fillStyle = game.backgroundColor;
-    game.ctx.fillRect(0, 0, game.canvas.width, game.canvas.height);
+const animate = () => {
+    requestAnimationFrame(animate)
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    player.update();
+
+
 }
 
+animate();
 
-game.keydown = function(e) {
-      
-}      
+
+    // Move player
+    addEventListener('keydown', ({ key }) => {
+        console.log(key);
+        const speed = 7;
     
-game.init = function() {
-      // Set the game loop
-    game.interval = setInterval(game.update, 1000 / 60);
-}
-
-
-game.stop = function() {
-    clearInterval(game.interval);
-}
+        // left
+        if(key === 'a' && player.pos.x  >= 300) {
+            player.velocity.x = -(speed);
+        }
+        //right
+        else if(key === 'd' && player.pos.x + player.width <= canvas.width - 300) {
+            player.velocity.x = speed;
+        }
+        //shoot
+        else if(key === ' ') {
+            console.log('fire!!');
+        }
+    })
     
-
-game.restart = function() {
-    game.stop();
-    game.init();
-}
+    addEventListener('keyup', ({ key }) => {
     
+        // left
+        if(key === 'a') {
+            player.velocity.x = 0;
+    
+        }
+        //right
+        else if(key === 'd') {
+            player.velocity.x = 0;
+        }
+        //shoot
+        else if(key === ' ') {
+    
+        }
+    })
 
-window.onload = game.init;
 
 
-window.onkeydown = game.keydown;
-
-
-
- 
 
  
 
