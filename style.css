@@ -7,9 +7,3 @@ body {
 #canvas {
     margin: 0 auto;
 }
-
-#scoreboard {
-    background-color: rebeccapurple;
-    width: 100vw;
-    height: 550px;
-}
