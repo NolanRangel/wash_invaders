@@ -1,3 +1,8 @@
+import KeyControls from "./KeyControls.js";
+import Bullet from "./Bullet.js";
+
+
+
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
@@ -39,27 +44,7 @@ class Player {
     }
 }
 
-class Projectile {
-    constructor({ pos, velocity }) {
-        this.pos = pos;
-        this.velocity = velocity;
-        this.radius = 3;
-    }
 
-    draw(){
-        ctx.beginPath();
-        ctx.arc(this.pos.x, this.pos.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'blue';
-        ctx.fill();
-        ctx.closePath();
-    }
-
-    update(){
-        this.draw();
-        this.pos.x += this.velocity.x;
-        this.pos.y += this.velocity.y;
-    }
-}
 
 class Invader {
     constructor() {
@@ -99,95 +84,76 @@ class Invader {
 
 
 const player = new Player();
+const keyControls = new KeyControls();
 const invader = new Invader();
-const projectiles = [];
-const keys ={
-    a: {
-        pressed: false
-    },
-    d: {
-        pressed: false
-    },
-    space: {
-        pressed: false
-    }
-}
+const bullets = [];
+console.log(bullets[0]);
 
-const animate = () => {
-    requestAnimationFrame(animate)
+
+// Game loop
+function loopy (t) {
+    requestAnimationFrame(loopy)
 
     ctx.fillStyle = 'black';
+    ctx.globalAlpha = 1;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Random circle starfield animation
+    ctx.fillStyle = "#fff";
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const radius = Math.random() * 5;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
 
     invader.update();
     player.update();
 
-    projectiles.forEach((projectile, idx) => {
-        if(projectile.pos.y + projectile.radius <= 0) {
-            setTimeout(() => {
-                projectiles.splice(idx, 1)
-            }, 0)
-        } else {
-            projectile.update()
-        }
-    })
+    // console.log(bullets);
+    // bullets.forEach((bullet, idx) => {
+    //     // Clears bullet from array once off screen
+    //     if(bullet.pos.y + bullet.radius <= 0) {
+    //         setTimeout(() => {
+    //             bullets.splice(idx, 1)
+    //         }, 0)
+    //     } else {
+    //         bullet.update()
+    //     }
+    // })
 
     // player speed control
     const speed = 7;
-    if(keys.a.pressed && player.pos.x >= 20) {
+    if(keyControls.keys.a.pressed && player.pos.x >= 20) {
         player.velocity.x = -(speed);
     }
-    else if (keys.d.pressed && player.pos.x + player.width <= canvas.width - 20){
+    else if (keyControls.keys.d.pressed && player.pos.x + player.width <= canvas.width - 20){
         player.velocity.x = speed;
+    }
+    else if (keyControls.keys.space.pressed) {
+        console.log(new Bullet({pos: {x: 100, y: 100}, velocity: {x: 0, y: 0}}));
+        bullets.push(
+            new Bullet({
+                pos: {
+                    x: player.pos.x + player.width / 2,
+                    y: player.pos.y
+                },
+                velocity: {
+                    x: 0,
+                    y: -15
+                }
+            })
+        )
     }
     else {
         player.velocity.x = 0;
     }
+    // keyControls.reset();
 
 }
 
-animate();
-
-
-window.addEventListener('keydown', (e) => {
-    switch(e.key) {
-        case 'a':
-            keys.a.pressed = true;
-            break
-        case 'd':
-            keys.d.pressed = true;
-            break
-        case ' ':
-            projectiles.push(
-                new Projectile({
-                    pos: {
-                        x: player.pos.x + player.width / 2,
-                        y: player.pos.y
-                    },
-                    velocity: {
-                        x: 0,
-                        y: -15
-                    }
-                })
-            )
-            break
-    }
-})
-
-window.addEventListener('keyup', (e) => {
-    switch(e.key) {
-        case 'a':
-            keys.a.pressed = false;
-            break
-        case 'd':
-            keys.d.pressed = false;
-            break
-        case ' ':
-            keys.space.pressed = false;
-            break
-    }
-})
-
+requestAnimationFrame(loopy);
 
 
 
