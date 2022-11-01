@@ -1,51 +1,72 @@
+import Bullet from "./Bullet.js"
+
+
 
 class KeyControls {
-    constructor () {
+    constructor ({ player }) {
       this.keys = {
         a: {
             pressed: false
         },
         d: {
-            pressed: false
+            pressed: false 
         },
         space: {
+            bullets: [],
             pressed: false
         }
-    };
-    this.bullets = [];
-      // Bind event handlers
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'a') {
-            this.keys.a.pressed = true;
-        }
-        else if (e.key === 'd') {
-            this.keys.d.pressed = true;
-        }
-        else if (e.key === ' ') {
-            this.keys.space.pressed = true;
-        }
-    })
+        };
 
-    window.addEventListener('keyup', (e) => {
-        if (e.key === 'a') {
-            this.keys.a.pressed = false;
+        document.addEventListener('keydown', (e) => {
+            e.preventDefault();
+            switch(e.key) {
+                case 'a':
+                    this.keys.a.pressed = true; 
+                    break;  
+                case 'd':
+                    this.keys.d.pressed = true;
+                    break;
+                case ' ':
+                    this.keys.space.pressed = false;
+                    break;
+            }
+        })
+
+
+        document.addEventListener('keyup', (e) => {
+            e.preventDefault();
+            switch(e.key) {
+                case 'a':
+                    this.keys.a.pressed = false;
+                    break;
+                case 'd':
+                    this.keys.d.pressed = false;
+                    break;
+                case ' ':
+                    this.keys.space.bullets.push(
+                        new Bullet({
+                            pos: {
+                                x: player.pos.x + player.width / 2,
+                                y: player.pos.y
+                            },
+                            velocity: {
+                                x: 0,
+                                y: -10
+                            }
+                        })
+                    )
+                    break;
+                }
+            })   
         }
-        else if (e.key === 'd') {
-            this.keys.d.pressed = false;
-        }
-        else if (e.key === ' ') {
-            this.keys.space.pressed = false;
-        }
-    })
-    }
-    // Handle key actions
-    // reset () {
-    //     for (let key in this.keys) {
-    //       this.keys[key] = false;
-    //     }
-    // };
+
+
+
+}
+
+
  
-  }
+
 
 
   export default KeyControls;
