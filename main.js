@@ -1,6 +1,5 @@
 import Player from "./Player.js";
 import KeyControls from "./KeyControls.js";
-import Invader from "./Invader.js";
 import Grid from "./Grid.js";
 
 
@@ -15,7 +14,6 @@ canvas.height = window.innerHeight - 20;
 const player = new Player();
 const keyControls = new KeyControls({ player });
 const invaderGrid = new Grid();
-
 
 
 let frames = 0;
@@ -41,11 +39,6 @@ function loopy () {
     ctx.fill();
 
     ctx.restore();
-
-    // invader.update();
-    player.update();
-    // grid.update();
-
 
     // left
     if(keyControls.keys.a.pressed && player.pos.x >= 20) {
@@ -79,6 +72,15 @@ function loopy () {
         grid.update();
 
         grid.invaders.forEach((invader, i) => {
+            console.log(invader.pos.y);
+            if (invader.pos.x + invader.width >= canvas.width - 20) {
+                invaderGrid.velocity.x = -2
+                invaderGrid.velocity.y = 30
+                
+            } 
+            else if (invader.pos.x + invader.width <= 70) {
+                invaderGrid.velocity.x = 2
+            }
             invader.update({ velocity: invaderGrid.velocity}); 
             
         })
@@ -91,8 +93,8 @@ function loopy () {
 
 
 
-      // spawning enemies
-      if (frames % randomInterval === 0) {
+      // spawning invaders
+    if (frames % randomInterval === 0) {
         invaderGrid.grids.push(new Grid());
         randomInterval = Math.floor(Math.random() * 500 + 500);
         frames = 0;

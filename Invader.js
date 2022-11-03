@@ -27,23 +27,13 @@ class Invader {
     }
 
     update({ velocity }) {
-        if(this.image) {
-            if (this.pos.x + this.width >= canvas.width - 20) {
-                console.log(Number(this.pos.x += -(velocity.x)) );
-                Number(this.pos.y += -(velocity.y))
-                // this.pos.y -= 2;
-                // this.velocity.y += 30
-                this.draw();
-            } else {
-                this.pos.x += velocity.x;
-                this.pos.y += velocity.y;
-                this.velocity.y = 0;
-                this.draw();
+        if(this.image) { 
+            if (velocity.x < 0) {
             }
-            
-            
-
-    
+            this.pos.x += velocity.x;
+            this.pos.y + velocity.y;
+            this.velocity.y = 0;
+            this.draw();  
 
         }
     }

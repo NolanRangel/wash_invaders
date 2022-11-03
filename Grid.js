@@ -40,8 +40,8 @@ class Grid {
         this.velocity.y = 0;
 
         if (this.pos.x + this.width >= canvas.width || this.pos.x <= 0) {
-        this.velocity.x = -this.velocity.x;
-        this.velocity.y = 30;
+            this.velocity.x = -this.velocity.x;
+            this.velocity.y = 30;
         }
     }
 
