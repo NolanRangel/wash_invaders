@@ -12,7 +12,7 @@ class Player {
             this.height = image.height * 0.12;
             this.pos = {
                 x: canvas.width / 2 - this.width / 2,
-                y: canvas.height - this.height - 30
+                y: canvas.height - this.height - 130
             };
         }
 

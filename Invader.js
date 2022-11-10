@@ -28,11 +28,8 @@ class Invader {
 
     update({ velocity }) {
         if(this.image) { 
-            if (velocity.x < 0) {
-            }
             this.pos.x += velocity.x;
-            this.pos.y + velocity.y;
-            this.velocity.y = 0;
+            this.pos.y += velocity.y;
             this.draw();  
 
         }
