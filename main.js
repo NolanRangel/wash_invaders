@@ -58,7 +58,6 @@ function loopy() {
 
     // Bullet garbage collection & update
     keyControls.keys.space.bullets.forEach((bullet, idx) => {
-        // Clears bullet from array once off screen
         if (bullet.pos.y + bullet.radius <= 0) {
             setTimeout(() => {
                 keyControls.keys.space.bullets.splice(idx, 1)
@@ -68,20 +67,54 @@ function loopy() {
         }
     })
 
+    // Grid and Invader movement
     invaderGrid.grids.forEach((grid, idx) => {
         grid.update();
 
         grid.invaders.forEach((invader, i) => {
-            console.log(invader.pos.y);
-            if (invader.pos.x + invader.width >= canvas.width - 20) {
-                invaderGrid.velocity.x = -2
-                invaderGrid.velocity.y = 30
 
+            invader.update({ velocity: invaderGrid.velocity })
+            let drop = 5;
+            let speed = 1;
+
+            if (invader.pos.x + invader.width >= canvas.width - 20) {
+
+                invaderGrid.velocity.x = -(speed);
+                grid.invaders.forEach(invader => {
+                    invader.pos.y += drop;
+                })
+            } else if (invader.pos.x + invader.width <= 60) {
+
+                invaderGrid.velocity.x = speed;
+                grid.invaders.forEach(invader => {
+                    invader.pos.y += drop;
+                })
             }
-            else if (invader.pos.x + invader.width <= 70) {
-                invaderGrid.velocity.x = 2
-            }
+
+            keyControls.keys.space.bullets.forEach((bullet, j) => {
+                let bpy = bullet.pos.y;
+                let bpx = bullet.pos.x;
+                let ipy = invader.pos.y;
+                let ipx = invader.pos.x;
+                let br = bullet.radius;
+                let ih = invader.height;
+                let iw = invader.width;
+
+                if (
+                    bpy - br <= ipy + ih && // top of bullet <= bottom of invader
+                    bpx + br >= ipx && // right side of bullet >= left side of invader
+                    bpx - br <= ipx + iw && // left side of bullet <= right side of invader
+                    bpy + br >= ipy // bottom of projectile >= bottom of invader
+                ) {
+
+                    console.log('hit');
+                    grid.invaders.splice(i, 1);
+                    keyControls.keys.space.bullets.splice(j, 1);
+                }
+            });
+
             invader.update({ velocity: invaderGrid.velocity });
+            grid.update();
 
         })
     })

@@ -1,6 +1,9 @@
 class Bullet {
     constructor({ pos, velocity }) {
-        this.pos = pos;
+        this.pos = {
+            x: pos.x,
+            y: pos.y
+        }
         this.velocity = velocity;
         this.radius = 6;
     }
