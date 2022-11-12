@@ -19,14 +19,14 @@ const invaderGrid = new Grid();
 let frames = 0;
 let randomInterval = Math.floor(Math.random() * 500 + 500);
 let game = {
-  over: false,
-  active: true
+    over: false,
+    active: true
 }
 
 // Game loop
-function loopy () {
+function loopy() {
     requestAnimationFrame(loopy)
-
+    // Draw Playing field
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     // Random circle starfield animation
@@ -41,12 +41,12 @@ function loopy () {
     ctx.restore();
 
     // left
-    if(keyControls.keys.a.pressed && player.pos.x >= 20) {
+    if (keyControls.keys.a.pressed && player.pos.x >= 20) {
         player.velocity.x = -7;
         player.update();
     }
     // right
-    if (keyControls.keys.d.pressed && player.pos.x + player.width <= canvas.width - 20){
+    if (keyControls.keys.d.pressed && player.pos.x + player.width <= canvas.width - 20) {
         player.velocity.x = 4;
         player.update();
     }
@@ -59,7 +59,7 @@ function loopy () {
     // Bullet garbage collection & update
     keyControls.keys.space.bullets.forEach((bullet, idx) => {
         // Clears bullet from array once off screen
-        if(bullet.pos.y + bullet.radius <= 0) {
+        if (bullet.pos.y + bullet.radius <= 0) {
             setTimeout(() => {
                 keyControls.keys.space.bullets.splice(idx, 1)
             }, 0)
@@ -76,13 +76,13 @@ function loopy () {
             if (invader.pos.x + invader.width >= canvas.width - 20) {
                 invaderGrid.velocity.x = -2
                 invaderGrid.velocity.y = 30
-                
-            } 
+
+            }
             else if (invader.pos.x + invader.width <= 70) {
                 invaderGrid.velocity.x = 2
             }
-            invader.update({ velocity: invaderGrid.velocity}); 
-            
+            invader.update({ velocity: invaderGrid.velocity });
+
         })
     })
 
@@ -93,15 +93,15 @@ function loopy () {
 
 
 
-      // spawning invaders
-    if (frames % randomInterval === 0) {
-        invaderGrid.grids.push(new Grid());
-        randomInterval = Math.floor(Math.random() * 500 + 500);
-        frames = 0;
-    }
+// spawning invaders
+if (frames % randomInterval === 0) {
+    invaderGrid.grids.push(new Grid());
+    randomInterval = Math.floor(Math.random() * 500 + 500);
+    frames = 0;
+}
 
-    frames++;
-    
+frames++;
+
 
 
 
@@ -110,6 +110,5 @@ requestAnimationFrame(loopy);
 
 
 
- 
 
-  
+
