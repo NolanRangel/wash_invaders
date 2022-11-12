@@ -113,9 +113,8 @@ function loopy () {
                 }
             });
 
-
             invader.update({ velocity: invaderGrid.velocity}); 
-            // grid.update();
+            grid.update();
             
         })
     })
