@@ -8,17 +8,14 @@ class Grid {
         y: 0
       }  
       this.velocity = {
-        x: 2,
+        x: 3,
         y: 0
       } 
-      // this.grids = [];
       this.invaders = [];
-  
-      const columns = Math.floor(Math.random() * 2 + 4)
-      const rows = Math.floor(Math.random() * 2 + 2);
+      const columns = Math.floor(Math.random() * 5 + 4)
+      const rows = Math.floor(Math.random() * 3 + 2);
       this.speed = 1;
-      this.drop = 30;
-  
+      this.drop = 60;
       this.width = columns * 30; 
   
       for (let i = 0; i < columns; i++) { 
@@ -27,7 +24,7 @@ class Grid {
                 new Invader({
                     pos: {
                         x: i * 60,
-                        y: j * 60
+                        y: j * 60 + 50
                     }
             }));
         }

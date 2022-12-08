@@ -47,7 +47,7 @@ function loopy() {
     }
     // right
     if (keyControls.keys.d.pressed && player.pos.x + player.width <= canvas.width - 20) {
-        player.velocity.x = 4;
+        player.velocity.x = 7;
         player.update();
     }
     else {
@@ -72,9 +72,7 @@ function loopy() {
         grid.update();
 
         grid.invaders.forEach((invader, i) => {
-
-            invader.update({ velocity: invaderGrid.velocity })
-
+            invader.update({ velocity: grid.velocity })
 
             keyControls.keys.space.bullets.forEach((bullet, j) => {
                 let bpy = bullet.pos.y;
