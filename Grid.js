@@ -11,11 +11,13 @@ class Grid {
         x: 2,
         y: 0
       } 
-      this.grids = [];
+      // this.grids = [];
       this.invaders = [];
   
-      const columns = Math.floor(Math.random() * 10 + 5)
-      const rows = Math.floor(Math.random() * 5 + 2);
+      const columns = Math.floor(Math.random() * 2 + 4)
+      const rows = Math.floor(Math.random() * 2 + 2);
+      this.speed = 1;
+      this.drop = 30;
   
       this.width = columns * 30; 
   
@@ -39,11 +41,12 @@ class Grid {
         this.pos.y += this.velocity.y;
         this.velocity.y = 0;
 
-        if (this.pos.x + this.width >= canvas.width || this.pos.x <= 0) {
-            this.velocity.x = -this.velocity.x;
-            this.velocity.y = 30;
+        if (this.pos.x + this.width >= canvas.width - 130 || this.pos.x <= 0) {
+          this.velocity.x = (this.speed) * -(this.velocity.x);
+          this.velocity.y = this.drop;
+          this.speed += .1;
+          }
         }
-    }
 
 
 }

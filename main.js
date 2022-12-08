@@ -13,11 +13,11 @@ canvas.height = window.innerHeight - 20;
 
 const player = new Player();
 const keyControls = new KeyControls({ player });
-const invaderGrid = new Grid();
 
-
+let grids = [];
 let frames = 0;
-let randomInterval = Math.floor(Math.random() * 500 + 500);
+let randomInterval = Math.floor(Math.random() * 250 + 250);
+
 let game = {
   over: false,
   active: true
@@ -68,28 +68,12 @@ function loopy () {
     })
 
     // Grid and Invader movement
-    invaderGrid.grids.forEach((grid, idx) => {
+    grids.forEach((grid, idx) => {
         grid.update();
 
         grid.invaders.forEach((invader, i) => {
 
-            invader.update({ velocity: invaderGrid.velocity})
-            let drop = 5;
-            let speed = 1;
-
-            if (invader.pos.x + invader.width >= canvas.width - 20) {
-
-                invaderGrid.velocity.x = -(speed);
-                grid.invaders.forEach( invader => {
-                    invader.pos.y += drop;
-                })  
-            } else if (invader.pos.x + invader.width <= 60) {
-
-                invaderGrid.velocity.x = speed;
-                grid.invaders.forEach( invader => {
-                    invader.pos.y += drop;
-                })
-            }
+            invader.update({ velocity: grid.velocity})
 
             keyControls.keys.space.bullets.forEach((bullet, j) => {
                 let bpy = bullet.pos.y;
@@ -102,38 +86,33 @@ function loopy () {
 
                 if (
                     bpy - br <= ipy + ih && // top of bullet <= bottom of invader
-                    bpx + br >= ipx && // right side of bullet >= left side of invader
+                    bpx + br >= ipx && // right side of buallet >= left side of invader
                     bpx - br <= ipx + iw && // left side of bullet <= right side of invader
                     bpy + br >= ipy // bottom of projectile >= bottom of invader
                     ) {
-
-                    console.log('hit');
                     grid.invaders.splice(i, 1);
                     keyControls.keys.space.bullets.splice(j, 1);
                 }
             });
-
-            invader.update({ velocity: invaderGrid.velocity}); 
-            grid.update();
             
         })
     })
 
-
+    // spawning invaders
+    if (frames % randomInterval === 0) {
+    grids.push(new Grid());
+        randomInterval = Math.floor(Math.random() * 250 + 250);
+        frames = 0;
+    }
+    frames++;
 
 
 }
 
 
 
-      // spawning invaders
-    if (frames % randomInterval === 0) {
-        invaderGrid.grids.push(new Grid());
-        randomInterval = Math.floor(Math.random() * 500 + 500);
-        frames = 0;
-    }
 
-    frames++;
+ 
     
 
 

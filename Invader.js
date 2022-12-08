@@ -10,8 +10,8 @@ class Invader {
         image.src = './img/dirty-truck-2.jpeg';
         image.onload = () => {
             this.image = image
-            this.width = image.width * 0.1;
-            this.height = image.height * 0.1;
+            this.width = image.width * .1;
+            this.height = image.height * .1;
             this.pos = {
                 x: pos.x,
                 y: pos.y
@@ -28,9 +28,10 @@ class Invader {
 
     update({ velocity }) {
         if(this.image) { 
+            this.draw(); 
             this.pos.x += velocity.x;
             this.pos.y += velocity.y;
-            this.draw();  
+             
 
         }
     }
