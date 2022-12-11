@@ -1,3 +1,7 @@
+import invaderBullet from "./invaderBullet.js";
+
+
+
 
 class Invader {
     constructor({ pos }) {
@@ -5,7 +9,7 @@ class Invader {
             x: 0,
             y: 0
         };
-
+        this.invaderBullets = [];
         const image = new Image();
         image.src = './img/dirty-truck-2.jpeg';
         image.onload = () => {
@@ -34,6 +38,18 @@ class Invader {
              
 
         }
+    }
+    shoot() {
+        this.invaderBullets.push(new invaderBullet({
+            pos: {
+                x: this.pos.x + this.width / 2,
+                y: this.pos.y + this.height
+            },
+            velocity: {
+                x: 0,
+                y: Math.floor((Math.random() * 10) + 2)
+            }
+        }))
     }
 
     
