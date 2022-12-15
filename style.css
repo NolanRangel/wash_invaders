@@ -1,4 +1,4 @@
-body {
+/* body {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
@@ -7,3 +7,89 @@ body {
 #canvas {
     margin: 0 auto;
 }
+
+#scoreboard {
+    display: flex;
+}
+
+.scoreboard-inner {
+    display: flex;
+} */
+
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    color: #fff;
+    font-family:Verdana, Geneva, Tahoma, sans-serif
+  }
+
+  .wrapper{
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 0;
+    padding: 10px 0 0 0;
+  }
+
+  .score-text, .score {
+    color: lime;
+    font-size: 26px;
+    padding-right: 20px;
+}
+
+button {
+    width: 100px;
+    height: auto;
+    padding: 10px;
+    background-color: lime;
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  button:hover {
+    cursor: pointer;
+  }
+
+  .gameplay {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* gap: 120px; */
+    margin: 0;
+    padding: 0;
+  }
+
+  .life-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .life-text, .life {
+    color: red;
+    font-size: 26px;
+    padding-right: 10px;
+  }
+
+  .level-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .level-text, .level {
+    color: red;
+    font-size: 26px;
+    padding-right: 10px;
+  }
+  

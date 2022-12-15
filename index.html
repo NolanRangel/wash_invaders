@@ -5,19 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wash Invaders</title>
-    <link rel="stylesheet" src="/style.css">
+    <link rel="stylesheet"  href="/style.css">
 </head>
 <body>
-    
-    <canvas id="canvas" ></canvas>
-
-    <div id="scoreboard">
-        <div class="score"></div>
-        <div class="lives"></div>
-        <div class="level"></div>
+    <div class="wrapper">
+        <div class="container">
+            <div class="score-board">
+                <span class="score-text">Score:</span>
+                <span id="scoreEl" class="score">0</span>
+            </div>
+            <div class="button-container">
+                <button>PLAY</button>
+            </div>
+            <div class="gameplay">
+                <div class="life-banner">
+                    <span class="life-text">Lives</span>
+                    <span id="lifeEl" class="life">3</span>
+                </div>
+                <div class="level-banner">
+                    <span class="level-text">Level</span>
+                    <span class="level">1</span>
+                </div>
+            </div>
+        </div>
+        <canvas id="canvas" ></canvas>
     </div>
 
-
     <script type="module" src="/main.js" ></script>
+
 </body>
 </html>

@@ -4,10 +4,9 @@ import Grid from "./Grid.js";
 import Particle from "./Particle.js";
 
 
-
+// Canvas
 const canvas = document.getElementById('canvas');
 window.ctx = canvas.getContext('2d');
-
 canvas.width = window.innerWidth - 20;
 canvas.height = window.innerHeight - 20;
 
@@ -20,8 +19,10 @@ const particles = [];
 let frames = 0;
 let randomInterval = Math.floor(Math.random() * 250 + 250);
 
-let game = {
+const game = {
+    score: 0,
     lives: 3,
+    level: 0,
     over: false,
     active: true
 };
@@ -87,7 +88,8 @@ function loopy() {
         grid.update();
 
         // Shoots invader bullet every 100 frames
-        if (frames % 100 === 0 && grid.invaders.length > 0) {
+        const rateOfFire = [400, 200, 100, 50, 25]
+        if (frames % 400 === 0 && grid.invaders.length > 0) {
             grid.invaders[Math.floor(Math.random() * grid.invaders.length)].shoot()
         }
 
