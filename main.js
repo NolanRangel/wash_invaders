@@ -14,8 +14,8 @@ canvas.height = window.innerHeight - 20;
 const player = new Player();
 const keyControls = new KeyControls({ player });
 
-const grids = [];
-const particles = [];
+let particles = [];
+let grids = [];
 let frames = 0;
 let randomInterval = Math.floor(Math.random() * 250 + 250);
 
@@ -25,6 +25,7 @@ const game = {
     score: 0,
     lives: 3,
     level: 1,
+    highScore: 0,
     over: false,
     active: false
 };
@@ -32,7 +33,16 @@ const game = {
 
 // Game loop
 function loopy() {  
-    requestAnimationFrame(loopy)
+    if (game.lives > 0 || game.active != false) {
+        requestAnimationFrame(loopy)
+    } else {
+        setTimeout(() => {
+            const play = document.querySelector('.play')
+            canvas.style.display = 'none';
+            play.style.display = 'unset';
+        }, 1000)
+
+    }
     // Draw Playing field
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -86,40 +96,27 @@ function loopy() {
         }
     })
 
-     // Level keeping
-    switch(game.score) {
-        case 2000:
-            game.level = 2;
-            document.getElementById('levelEl').innerHTML = game.level; 
-            break;  
-        case 4000:
-            game.level = 3;
-            document.getElementById('levelEl').innerHTML = game.level;
-            break;
-        case 5000:
-            game.level = 4;
-            document.getElementById('levelEl').innerHTML = game.level;
-            break;
-        case 6000:
-            game.level = 5;
-            document.getElementById('levelEl').innerHTML = game.level;
-            break;
-        
-    }
-
 
     // Grid and Invader movement Invader projectiles
     grids.forEach((grid, idx) => {
         grid.update();
 
         // Dynamic Invader rate of fire
-        const rateOfFire = [300, 200, 100, 50, 25]
+        const rateOfFire = [400, 350, 300, 250, 200, 150, 100, 50, 25, 15]
         if (frames % rateOfFire[game.level - 1] === 0 && grid.invaders.length > 0) {
             grid.invaders[Math.floor(Math.random() * grid.invaders.length)].shoot()
         }
 
+        // Invader & Player collision with particles & counters
         grid.invaders.forEach((invader, i) => {
             invader.update({ velocity: grid.velocity })
+
+            if (invader.pos.y + invader.height >= canvas.height) {
+                setTimeout(() => {
+                    game.lives = 0;
+                    console.log(game.active);
+                }, 0)
+            }
 
             // Invader Bullets update & garbage collection & collision detection for Player
             invader.invaderBullets.forEach((invaderBullet, ivb) => {
@@ -151,23 +148,10 @@ function loopy() {
                             radius: Math.random() * 3,
                             color: 'blue'
                         }))}
-
-                        console.log( typeof game.lives);
-                    if (game.lives <= 0) {
-                        game.active = false;
-                        // setTimeout(() => {
-                        //         player.opacity = 0;
-                        //         const play = document.querySelector('.play')
-                        //         play.style.display = 'unset';
-                        //     }, 0)
-                        //     setTimeout(() => {
-                        //         player.opacity = 1;
-                        //     }, 1000)
-                        // }
-                    } else {
-                        game.lives -= 1;
-                        document.getElementById('lifeEl').innerHTML = game.lives;
-                    }
+                    
+                    // Life counter
+                    game.lives -= 1;
+                    document.getElementById('lifeEl').innerHTML = game.lives;
 
                     // Invader bullet garbage collection
                     setTimeout(() => {
@@ -194,6 +178,8 @@ function loopy() {
                 let ipx = invader.pos.x;
                 let ih = invader.height;
                 let iw = invader.width;
+
+                
 
                 if (
                     bpy - br <= ipy + ih && // top of bullet <= bottom of invader
@@ -246,21 +232,79 @@ function loopy() {
         frames = 0;
     }
     frames++;
-
     
+
+     // Level keeping
+    switch(game.score) {
+        case 1000:
+            game.level = 2;
+            document.getElementById('levelEl').innerHTML = game.level; 
+            break;  
+        case 2000:
+            game.level = 3;
+            document.getElementById('levelEl').innerHTML = game.level;
+            break;
+        case 3000:
+            game.level = 4;
+            document.getElementById('levelEl').innerHTML = game.level;
+            break;
+        case 5000:
+            game.level = 5;
+            document.getElementById('levelEl').innerHTML = game.level;
+            break;
+        case 8000:
+            game.level = 6;
+            document.getElementById('levelEl').innerHTML = game.level;
+            break;
+        case 12000:
+            game.level = 7;
+            document.getElementById('levelEl').innerHTML = game.level;
+            break;
+        case 20000:
+            game.level = 8;
+            document.getElementById('levelEl').innerHTML = game.level;
+            break;
+        case 32000:
+            game.level = 9;
+            document.getElementById('levelEl').innerHTML = game.level;
+            break;
+        case 52000:
+            game.level = 10;
+            document.getElementById('levelEl').innerHTML = game.level;
+            break;
+            
+    }
 
 }
 
 
-
+// Start and reset game
 const play = document.querySelector('button')
 play.addEventListener('click', () => {
+    // Set game variables
     game.active = true; 
+    game.lives = 3;
+    game.score = 0;
+
+    // Render onscreen game object stats
+    document.getElementById('lifeEl').innerHTML = game.lives;
+    document.getElementById('scoreEl').innerHTML = game.score;
+    document.getElementById('levelEl').innerHTML = game.level;
+    // Clear Grids and arrays
+
+    keyControls.keys.space.bullets = [];
+    particles = [];
+    grids = [];
+    randomInterval = Math.floor(Math.random() * 250 + 250);
+    frames = 0;
+
+    // Set canvas
     const play = document.querySelector('.play')
     play.style.display = 'none';
-    if (game.active) {
-        loopy();
-    } 
+    canvas.style.display = 'unset';
+
+    // Initiate game loop
+    loopy();
 })
 
 

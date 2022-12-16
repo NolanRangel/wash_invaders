@@ -16,13 +16,6 @@ class KeyControls {
             pressed: false
         }
         };
-        // this.game = {
-        //     score: 0,
-        //     lives: 3,
-        //     level: 0,
-        //     over: false,
-        //     active: false
-        // };
 
         document.addEventListener('keydown', (e) => {
             e.preventDefault();
