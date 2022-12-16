@@ -3,6 +3,7 @@ class Player {
         this.velocity = {
             x: 0
         };
+        this.opacity = 1;
 
         const image = new Image();
         image.src = './img/player.jpeg';

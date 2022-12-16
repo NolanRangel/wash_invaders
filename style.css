@@ -76,7 +76,7 @@ button {
   }
 
   .life-text, .life {
-    color: red;
+    color: lime;
     font-size: 26px;
     padding-right: 10px;
   }
@@ -88,8 +88,20 @@ button {
   }
 
   .level-text, .level {
-    color: red;
+    color: lime;
     font-size: 26px;
     padding-right: 10px;
   }
+
+  .play {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+  }
   
+  .play-prompt {
+    color: lime;
+    font-size: 54px;
+  }

@@ -19,16 +19,19 @@ const particles = [];
 let frames = 0;
 let randomInterval = Math.floor(Math.random() * 250 + 250);
 
+
+
 const game = {
     score: 0,
     lives: 3,
-    level: 0,
+    level: 1,
     over: false,
-    active: true
+    active: false
 };
 
+
 // Game loop
-function loopy() {
+function loopy() {  
     requestAnimationFrame(loopy)
     // Draw Playing field
     ctx.fillStyle = 'black';
@@ -41,9 +44,10 @@ function loopy() {
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fill();
-
     ctx.restore();
 
+
+    // Movement
     // left
     if (keyControls.keys.a.pressed && player.pos.x >= 20) {
         player.velocity.x = -7;
@@ -60,7 +64,7 @@ function loopy() {
     }
 
 
-    // Bullet garbage collection & update
+    // Bullet update & garbage collection
     keyControls.keys.space.bullets.forEach((bullet, idx) => {
         if (bullet.pos.y + bullet.radius <= 0) {
             setTimeout(() => {
@@ -82,17 +86,37 @@ function loopy() {
         }
     })
 
+     // Level keeping
+    switch(game.score) {
+        case 2000:
+            game.level = 2;
+            document.getElementById('levelEl').innerHTML = game.level; 
+            break;  
+        case 4000:
+            game.level = 3;
+            document.getElementById('levelEl').innerHTML = game.level;
+            break;
+        case 5000:
+            game.level = 4;
+            document.getElementById('levelEl').innerHTML = game.level;
+            break;
+        case 6000:
+            game.level = 5;
+            document.getElementById('levelEl').innerHTML = game.level;
+            break;
+        
+    }
+
 
     // Grid and Invader movement Invader projectiles
     grids.forEach((grid, idx) => {
         grid.update();
 
-        // Shoots invader bullet every 100 frames
-        const rateOfFire = [400, 200, 100, 50, 25]
-        if (frames % 400 === 0 && grid.invaders.length > 0) {
+        // Dynamic Invader rate of fire
+        const rateOfFire = [300, 200, 100, 50, 25]
+        if (frames % rateOfFire[game.level - 1] === 0 && grid.invaders.length > 0) {
             grid.invaders[Math.floor(Math.random() * grid.invaders.length)].shoot()
         }
-
 
         grid.invaders.forEach((invader, i) => {
             invader.update({ velocity: grid.velocity })
@@ -127,12 +151,31 @@ function loopy() {
                             radius: Math.random() * 3,
                             color: 'blue'
                         }))}
-                        console.log('You lose!')
+
+                        console.log( typeof game.lives);
+                    if (game.lives <= 0) {
+                        game.active = false;
+                        // setTimeout(() => {
+                        //         player.opacity = 0;
+                        //         const play = document.querySelector('.play')
+                        //         play.style.display = 'unset';
+                        //     }, 0)
+                        //     setTimeout(() => {
+                        //         player.opacity = 1;
+                        //     }, 1000)
+                        // }
+                    } else {
+                        game.lives -= 1;
+                        document.getElementById('lifeEl').innerHTML = game.lives;
+                    }
+
+                    // Invader bullet garbage collection
                     setTimeout(() => {
                         invader.invaderBullets.splice(ivb, 1)
                         }, 0)
                     
                 }
+
                 if (invaderBullet.pos.y + invaderBullet.radius >= canvas.height) {
                     setTimeout(() => {
                         invader.invaderBullets.splice(ivb, 1)
@@ -171,21 +214,26 @@ function loopy() {
                                     y: (Math.random() - .5) * 2
                                 },
                                 radius: Math.random() * 3,
-                                color: 'white'
+                                color: 'lime'
                             }))}
-
-                    grid.invaders.splice(i, 1);
-                    keyControls.keys.space.bullets.splice(j, 1);
+                        
+                        // Score keeping
+                        game.score += 25;
+                        document.getElementById('scoreEl').innerHTML = game.score;
+                        
+                        // garbage collection
+                        grid.invaders.splice(i, 1);
+                        keyControls.keys.space.bullets.splice(j, 1);
                     
-                    // Update grid size and garbage collection
-                    if (grid.invaders.length > 0) {
-                        const firstInvader = grid.invaders[0];
-                        const lastInvader = grid.invaders[grid.invaders.length - 1];
-                        grid.width = lastInvader.pos.x - firstInvader.pos.x + lastInvader.width;
-                        grid.pos.x = firstInvader.pos.x;
-                    } else {
-                        grids.splice(idx, 1);
-                    }
+                        // Update grid size and garbage collection
+                        if (grid.invaders.length > 0) {
+                            const firstInvader = grid.invaders[0];
+                            const lastInvader = grid.invaders[grid.invaders.length - 1];
+                            grid.width = lastInvader.pos.x - firstInvader.pos.x + lastInvader.width;
+                            grid.pos.x = firstInvader.pos.x;
+                        } else {
+                            grids.splice(idx, 1);
+                        }
                 }
             }); 
         })
@@ -199,20 +247,27 @@ function loopy() {
     }
     frames++;
 
-
-
+    
 
 }
 
 
 
+const play = document.querySelector('button')
+play.addEventListener('click', () => {
+    game.active = true; 
+    const play = document.querySelector('.play')
+    play.style.display = 'none';
+    if (game.active) {
+        loopy();
+    } 
+})
 
- 
-    
 
 
 
-requestAnimationFrame(loopy);
+
+
 
 
 
